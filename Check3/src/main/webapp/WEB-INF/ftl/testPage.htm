@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>testPage.htm</title>
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+ function subform(){
+	 $.ajax({
+         type: "POST",
+         url:"http://localhost:8080/ssm/zlytest/save",
+         data:$('#formid').serialize(),// 你的formid
+         async: false,
+         error: function(request) {
+             alert("Connection error");
+         },
+         success: function(data) {
+        	 $('#myModal').modal('hide');
+        	 window.location="http://localhost:8080/ssm/zlytest/init";
+         }
+     });
+ }
+ function deletebyid(id){
+	 $.ajax({
+         type: "POST",
+         url:"http://localhost:8080/ssm/zlytest/deleteByHonghongId",
+         data:{"id":id},// 你的formid
+         async: false,
+         error: function(request) {
+             alert("Connection error");
+         },
+         success: function(data) {
+        	 window.location="http://localhost:8080/ssm/zlytest/init";
+         }
+     });
+ }
+</script>
+</head>
+
+<body>
+<div class="container-fluid">
+		<div class="page-header">
+		  <h1>Freemarke学习 <small>信息管理</small></h1>
+		</div>
+		<div class="panel panel-default">
+			<div class="row">
+			 <div class="col-md-3"></div>
+			  <div class="col-md-3">
+				<div class="input-group input-group">
+		  			<span class="input-group-addon" id="sizing-addon1">姓名</span>
+		  			<input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+				</div>
+			  </div>
+			  <div class="col-md-3">
+		      	<div class="input-group input-group">
+		  			<span class="input-group-addon" id="sizing-addon1">年龄</span>
+		  			<input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+				</div>
+			  <div class="col-md-3"></div>
+			  
+			  </div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+		  <div class="panel-body">
+	        <div class="row">
+	        <div class="table-responsive">
+				<table class="table table-hover">
+						<thead class="active">
+							<tr>
+					          <th>#</th>
+					          <th>id</th>
+					          <th>姓名</th>
+					          <th>年龄</th>
+					          <th>性别</th>
+					          <th>描述</th>
+	       					 </tr>
+						</thead>
+						<tbody>
+					<#list users as user> 
+						
+						<tr class="${(user_index%2==1)?string('success','active')}">
+							<td>${user_index}</td>
+							<td >${user.id}</td>
+							<td >${user.name}</td>
+							<td >${user.age}</td>
+							<td >${user.sex}</td>
+							<td >${user.description}</td>
+							<td >
+							
+								<div class="btn-group" role="group" aria-label="...">
+								  <button type="button" class="btn btn-danger" onclick="deletebyid('${user.id}');">删除</button>
+								</div>
+							
+							</td>
+						</tr>
+					</#list>
+					</tbody>
+				</table>
+				</div>
+				
+	        </div>
+		  </div>
+		  
+		  <div class="panel-footer">
+	        <div class="row">
+		        <div class="btn-group" role="group" aria-label="...">
+				  <button type="button" class="btn btn-primary"data-toggle="modal" data-target="#myModal">添加</button>
+				</div>
+				<div class="btn-group" role="group" aria-label="...">
+				  <button type="button" class="btn btn-danger">删除</button>
+				</div>
+				<div class="btn-group" role="group" aria-label="...">
+				  <button type="button" class="btn btn-success">刷新</button>
+				</div>
+	        </div>
+		  
+		  </div>
+		</div>
+        
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改信息</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="formid">
+      	<div class="input-group input-group-lg">
+      	<input type="hidden" name="id" value="12345678">
+  			<span class="input-group-addon" id="sizing-addon1">姓名</span>
+  			<input type="text" name="name" class="form-control" placeholder="姓名" aria-describedby="sizing-addon1">
+		</div>
+      	<div class="input-group input-group-lg">
+  			<span class="input-group-addon" id="sizing-addon1">年龄</span>
+  			<input type="text" name="age" class="form-control" placeholder="年龄" aria-describedby="sizing-addon1">
+		</div>
+      	<div class="input-group input-group-lg">
+  			<span class="input-group-addon" id="sizing-addon1">性别</span>
+  			<input type="text" name="sex" class="form-control" placeholder="性别" aria-describedby="sizing-addon1">
+		</div>
+      	<div class="input-group input-group-lg">
+  			<span class="input-group-addon" id="sizing-addon1">描述</span>
+  			<input type="text" name="description" class="form-control" placeholder="描述" aria-describedby="sizing-addon1">
+		</div>
+  </form>    	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" onclick="subform()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+</body>
+</html>
